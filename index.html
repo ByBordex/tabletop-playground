@@ -13,10 +13,10 @@
 </head>
 
 <body>
-  <h1>Canvas Playground</h1>
+  <h1 class="text-center">Grid Playground</h1>
   <div class="container col-md-12">
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-3">
         <h2>Controls</h2>
         <div class="col-md-12">
           <label >Grid color:</label>
@@ -24,16 +24,26 @@
         </div>
 
         <div class="col-md-12">
-          <label >Number of squares:</label>
-          <input class="col-md-10" id="nSquares" type="number" min="2" max="40">
+          <label >Number of squares in X-Axis:</label>
+          <input class="col-md-10" id="wSquares" type="number" min="2" max="40">
+        </div>
+
+        <div class="col-md-12">
+          <label >Number of squares in Y-Axis:</label>
+          <input class="col-md-10" id="hSquares" type="number" min="2" max="40">
+        </div>
+
+        <div class="col-md-12">
+          <label >Zoom:</label>
+          <input class="col-md-10" id="square-side" type="range" step="10" min="20" max="400">
         </div>
 
 
       </div>
-      <div class="col-md-10">
+      <div class="col-md-8">
         <h2>Canvas</h2>
-        <div class="col-md-6">
-          <canvas class="border" id='canvas'></canvas>
+        <div class="col-md-12 h-50" id="canvas-container">
+          <canvas class="border canvas" id='canvas'></canvas>
         </div>
       </div>
     </div>
@@ -47,6 +57,7 @@
 
   <script src="js/cp.min.js"></script>
   <script src='js/spectrum.js'></script>
+  <script src="js/config.js"></script>
   <script src="js/tabletop.js"></script>
   <script src="js/main.js"></script>
 </footer>

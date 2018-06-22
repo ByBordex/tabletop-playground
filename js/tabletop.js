@@ -1,32 +1,6 @@
 var configuration;
 var grid;
 
-class Configuration {
-  constructor() {
-    this.settings = new Map();
-    this.observers = []
-  }
-
-  addObserver(observer) {
-    this.observers.push(observer);
-  }
-
-  setValue(name, value) {
-    this.settings.set(name, value);
-    this.notify();
-  }
-
-  getValue(setting) {
-    return this.settings.get(setting);
-  }
-
-  notify() {
-    this.observers.forEach(function(obs) {
-      obs.update();
-    });
-  }
-
-}
 
 
 class Square {
@@ -52,15 +26,19 @@ class Grid {
 
   constructor(canvas) {
     this.canvas = canvas;
-    this.drawAreaWidth = canvas.width;
-
     this.squares = [];
-    for (var i = 0; i < configuration.getValue("tabletopSquares") ** 2; i++) {
+    this.createSquares();
+  }
+
+  createSquares() {
+    this.squares = [];
+    for (var i = 0; i < configuration.getValue("tabletop_w_squares") * configuration.getValue("tabletop_h_squares"); i++) {
       this.squares.push(new Square());
     }
   }
 
   update() {
+    this.createSquares();
     this.draw();
   }
 
@@ -75,23 +53,25 @@ class Grid {
     // Padding
     var p = 5;
 
-    var bw = this.drawAreaWidth - 2 * p;
-    var bh = this.drawAreaWidth - 2 * p;
+    var bw = configuration.getValue("tabletop_width") - 2 * p;
+    var bh = configuration.getValue("tabletop_width") - 2 * p;
 
-    // SquareWidth
-    var sw = bw / configuration.getValue("tabletopSquares");
+    //Square side
+    var sw = configuration.getValue("tabletop_sw")
+
     //Draw horizontal and vertical lines.
     context.beginPath();
     context.strokeStyle = configuration.getValue("gridStroke");
-    for (var x = 0; x <= bw; x += sw) {
-      context.moveTo(0.5 + x + p, p);
-      context.lineTo(0.5 + x + p, bh + p);
+      //Draw columns
+    for (var x = 0; x <= configuration.getValue("tabletop_w_squares"); x++) {
+      context.moveTo(0.5 + x * sw + p, p);
+      context.lineTo(0.5 + x * sw + p, configuration.getValue("tabletop_h_squares") * sw + p);
     }
-    for (var x = 0; x <= bh; x += sw) {
-      context.moveTo(p, 0.5 + x + p);
-      context.lineTo(bw + p, 0.5 + x + p);
+      //Draw rows
+    for (var x = 0; x <= configuration.getValue("tabletop_h_squares"); x++) {
+      context.moveTo(p, 0.5 + x*sw + p);
+      context.lineTo(configuration.getValue("tabletop_w_squares") * sw + p, 0.5 + x*sw + p);
     }
-
     context.closePath();
     context.stroke();
     //Draw squares content.
@@ -103,7 +83,7 @@ class Grid {
       context.beginPath();
 
       //If element dividend of number of squares(columns) we change row.
-      if (i != 0 && i % configuration.getValue("tabletopSquares") == 0) {
+      if (i != 0 && i % configuration.getValue("tabletop_w_squares") == 0) {
         row++;
         column = 0;
       }
@@ -122,21 +102,15 @@ function resizeTabletop(width) {
   var canvas = document.getElementById("canvas");
   var context = canvas.getContext("2d");
 
-  drawGrid(configuration.getValue("tabletopSquares"));
 }
 
 
 $("#canvas").ready(function() {
   var canvas = document.getElementById("canvas");
-  canvas.height = canvas.width;
-  configuration = new Configuration();
-  configuration.setValue("tabletopSquares", 20);
-  configuration.setValue("gridStroke", "black");
-  configuration.setValue("squareStroke", "Tomato");
+  canvas.height = configuration.getValue("tabletop_width");
+  canvas.width = configuration.getValue("tabletop_width");
 
   grid = new Grid(canvas)
   configuration.addObserver(grid);
   grid.draw();
-
-
 });

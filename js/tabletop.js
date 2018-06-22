@@ -17,6 +17,8 @@ class Square {
   }
 
   draw(context, x, y, size) {
+    //TODO
+    //Placeholder code
     context.arc(x + size / 2, y + size / 2, size / 2, 0, 2 * Math.PI);
     context.stroke();
   }
@@ -97,13 +99,6 @@ class Grid {
   }
 
 }
-
-function resizeTabletop(width) {
-  var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
-
-}
-
 
 $("#canvas").ready(function() {
   var canvas = document.getElementById("canvas");
